@@ -1,0 +1,20 @@
+name: RijksMuseum
+targets:
+  RijksMuseumApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.0"
+    sources: Sources/RijksMuseum
+    # dependencies:
+    scheme:
+      testTargets:
+        - RijksMuseumAppTests
+  RijksMuseumAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: Tests/RijksMuseumTests
+    dependencies:
+      - target: RijksMuseumApp
+    scheme:
+      testTargets:
+        - RijksMuseumAppTests
