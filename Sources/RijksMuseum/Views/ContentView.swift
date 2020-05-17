@@ -7,10 +7,9 @@
 //
 
 import SwiftUI
-// fpGQTuED
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
+        MainView()
     }
 }
 
