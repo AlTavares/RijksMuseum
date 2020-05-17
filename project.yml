@@ -1,11 +1,22 @@
 name: RijksMuseum
+options:
+  bundleIdPrefix: com.tavares
+packages:
+  SFSafeSymbols:
+    url: https://github.com/piknotech/SFSafeSymbols.git
+    from: 1.0.0
+  Logging:
+    url: "https://github.com/apple/swift-log.git"
+    from: 1.0.0
 targets:
   RijksMuseumApp:
     type: application
     platform: iOS
     deploymentTarget: "13.0"
     sources: Sources/RijksMuseum
-    # dependencies:
+    dependencies:
+      - package: SFSafeSymbols
+      - package: Logging
     scheme:
       testTargets:
         - RijksMuseumAppTests
