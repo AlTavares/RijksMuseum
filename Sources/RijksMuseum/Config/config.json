@@ -1,4 +1,9 @@
 {
     "host": "https://www.rijksmuseum.nl/api",
-    "apiKey": "fpGQTuED"
+    "apiKey": "fpGQTuED",
+    "defaultLanguage": "en",
+    "availableLanguages": [
+        "en",
+        "nl"
+    ]
 }

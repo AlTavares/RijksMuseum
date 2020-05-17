@@ -14,5 +14,6 @@ import Foundation
 // MARK: - Config
 struct Config: Codable, Equatable {
     let host: String
-    let apiKey: String
+    let apiKey, defaultLanguage: String
+    let availableLanguages: [String]
 }
