@@ -17,7 +17,7 @@ class ImageLoader: ObservableObject {
     }
 
     @Published var state: ValueState<UIImage> = .idle
-    private static let cache = ImageCache()
+    @Locatable private var cache: ImageCache
     private var task: AnyCancellable?
 
     func loadImage(from url: URLConvertible) {
@@ -26,7 +26,7 @@ class ImageLoader: ObservableObject {
         guard let url = url.url else {
             return state = .error(ImageNotAvailable())
         }
-        if let image = ImageLoader.cache[url] {
+        if let image = cache[url] {
             state = .loaded(image)
         }
         task = URLSession.shared.dataTaskPublisher(for: url)
@@ -34,7 +34,7 @@ class ImageLoader: ObservableObject {
                 try UIImage(data: data).unwrap()
             }
             .receive(on: DispatchQueue.main)
-            .cache(to: ImageLoader.cache, key: url)
+            .cache(to: cache, key: url)
             .map(ValueState.loaded)
             .catch { Just(ValueState.error($0)) }
             .assign(to: \.state, on: self)

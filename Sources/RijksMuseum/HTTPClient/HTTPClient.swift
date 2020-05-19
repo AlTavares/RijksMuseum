@@ -14,19 +14,27 @@ class HTTPClient {
     }
 
     @Locatable private var urlSession: URLSession
+    @Locatable private var cache: RequestCache
 
     func perform<T: Decodable>(request: Request) -> AnyPublisher<T, Error> {
-        guard let request = request.asURLRequest() else {
+        guard let urlRequest = request.asURLRequest() else {
             return Fail<T, Error>(error: RequestError.unableToCreateRequest)
                 .eraseToAnyPublisher()
         }
 
-        logger.debug(request.curlString)
+        logger.debug(urlRequest.curlString)
 
-        return urlSession.dataTaskPublisher(for: request)
+        if let cached = cache[request], let value = cached as? T {
+            return Result.Publisher(value).eraseToAnyPublisher()
+        }
+
+        return urlSession.dataTaskPublisher(for: urlRequest)
             .tryMap { data, _ in
                 try JSONDecoder().decode(T.self, from: data)
             }
+            .handleEvents(receiveOutput: { [cache] output in
+                cache[request] = output
+            })
             .logErrors()
             .eraseToAnyPublisher()
     }

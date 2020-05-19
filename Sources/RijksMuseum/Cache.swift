@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 typealias ImageCache = Cache<URL, UIImage>
+typealias RequestCache = Cache<Request, Decodable>
 
 final class Cache<Key: Hashable, Value>: ObservableObject {
     private let wrapped = NSCache<WrappedKey, Entry>()
@@ -97,10 +98,9 @@ private extension Cache {
 
 import Combine
 extension Publisher {
-    func cache<Key>(to cache: Cache<Key, Output>, key: Key) -> AnyPublisher<Self.Output, Self.Failure> {
+    func cache<Key>(to cache: Cache<Key, Output>, key: Key) -> AnyPublisher<Output, Failure> {
         handleEvents(receiveOutput: { output in
             cache[key] = output
-        })
-            .eraseToAnyPublisher()
+        }).eraseToAnyPublisher()
     }
 }

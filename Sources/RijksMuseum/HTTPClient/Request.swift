@@ -10,7 +10,7 @@ import Foundation
 typealias HTTPHeaders = [String: String]
 typealias QueryItems = [URLQueryItem]
 
-struct Request: CustomStringConvertible {
+struct Request: Hashable, CustomStringConvertible {
     var host: String
     var path: String
     var method: HTTPMethod = .get
