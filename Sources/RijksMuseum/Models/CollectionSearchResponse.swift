@@ -17,16 +17,20 @@ struct ArtObject: Codable, Equatable {
     let hasImage: Bool
     let principalOrFirstMaker, longTitle: String
     let showImage, permitDownload: Bool
-    let webImage, headerImage: Image
+    let webImage, headerImage: ImageResponse?
     let productionPlaces: [String]
 }
 
 // MARK: - Image
 
-struct Image: Codable, Equatable {
-    let guid: String
+struct ImageResponse: Codable, Equatable {
+    let guid: String?
     let offsetPercentageX, offsetPercentageY, width, height: Int
-    let url: String
+    let url: String?
+
+    var resizedUrl: String? {
+        url?.replacingOccurrences(of: "=s0", with: "=w300")
+    }
 }
 
 // MARK: - Links
