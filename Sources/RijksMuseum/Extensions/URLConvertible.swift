@@ -19,6 +19,6 @@ extension URL: URLConvertible {
     var url: URL? { self }
 }
 
-extension Optional where Wrapped == URL {
-    var url: URL? { self }
+extension Optional: URLConvertible where Wrapped: URLConvertible {
+    var url: URL? { self?.url }
 }
