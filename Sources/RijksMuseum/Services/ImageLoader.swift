@@ -10,24 +10,33 @@ import SwiftUI
 import UIKit
 
 class ImageLoader: ObservableObject {
-    @Published var image = UIImage()
+    struct ImageNotAvailable: LocalizedError {
+        var errorDescription: String? {
+            "Image not available"
+        }
+    }
+
+    @Published var state: ValueState<UIImage> = .idle
     private static let cache = ImageCache()
     private var task: AnyCancellable?
 
     func loadImage(from url: URLConvertible) {
+        state = .loading
         task?.cancel()
-        guard let url = url.url else { return }
+        guard let url = url.url else {
+            return state = .error(ImageNotAvailable())
+        }
         if let image = ImageLoader.cache[url] {
-            self.image = image
+            state = .loaded(image)
         }
         task = URLSession.shared.dataTaskPublisher(for: url)
-            .map { data, _ in
-                UIImage(data: data)
+            .tryMap { data, _ in
+                try UIImage(data: data).unwrap()
             }
-            .replaceError(with: nil)
-            .compactMap({ $0 })
             .receive(on: DispatchQueue.main)
             .cache(to: ImageLoader.cache, key: url)
-            .assign(to: \.image, on: self)
+            .map(ValueState.loaded)
+            .catch { Just(ValueState.error($0)) }
+            .assign(to: \.state, on: self)
     }
 }
