@@ -8,6 +8,7 @@ install:
 
 .PHONY: bootstrap
 bootstrap:
-	$(eval path = Sources/RijksMuseum/Config)
+	$(eval path = Sources/$(appName)/Config)
 	$(quicktype) $(path)/config.json -o $(path)/Config.swift
 	xcodegen
+	open $(appName).xcodeproj

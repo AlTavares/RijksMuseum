@@ -9,7 +9,7 @@ packages:
     url: "https://github.com/apple/swift-log.git"
     from: 1.0.0
 targets:
-  RijksMuseumApp:
+  RijksMuseum:
     type: application
     platform: iOS
     deploymentTarget: "13.0"
@@ -19,13 +19,13 @@ targets:
       - package: Logging
     scheme:
       testTargets:
-        - RijksMuseumAppTests
-  RijksMuseumAppTests:
+        - RijksMuseumTests
+  RijksMuseumTests:
     type: bundle.unit-test
     platform: iOS
     sources: Tests/RijksMuseumTests
     dependencies:
-      - target: RijksMuseumApp
+      - target: RijksMuseum
     scheme:
       testTargets:
-        - RijksMuseumAppTests
+        - RijksMuseumTests
