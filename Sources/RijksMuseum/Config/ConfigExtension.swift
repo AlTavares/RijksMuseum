@@ -8,7 +8,7 @@
 import Foundation
 
 extension Config {
-    func fromBundle() -> Self {
+    static func fromBundle() -> Self {
         guard let path = Bundle.main.path(forResource: "config", ofType: "json") else {
             fatalError("config.json file not found")
         }
@@ -20,8 +20,8 @@ extension Config {
         }
     }
 
-    var localizedHost: String {
-        let currentLanguage = Locale.current.languageCode
+    func localizedHost(from locale: Locale = .current) -> String {
+        let currentLanguage = locale.languageCode
             .flatMap { language in
                 availableLanguages.contains(language) ? language : nil
             }
